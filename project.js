@@ -42,7 +42,7 @@ module.exports = class {
         }
         catch (exc) {
             console.log(`Error requesting project metadata: ${exc.message}.\n` +
-                `URL: ${url}`);
+                        `URL: ${url}`);
             this.#error = exc.message;
         }
     }
