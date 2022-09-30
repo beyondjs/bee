@@ -154,7 +154,7 @@ module.exports = class {
 
         this.#uri = (() => {
             const {project} = this.#bee;
-            const {pkg} = project;
+            const {specifier} = project;
             const resource = this.#resource;
 
             const done = uri => join(process.cwd(), `${uri}.js`);
@@ -163,7 +163,7 @@ module.exports = class {
             if (is === 'transversal') return done(resource);
 
             // If the bundle is not contained in the project, the uri resolves into the node_modules folder
-            const root = resource.startsWith(`${pkg}/`) ? resource.slice(pkg.length) : `node_modules/${resource}`;
+            const root = resource.startsWith(`${specifier}/`) ? resource.slice(specifier.length) : `node_modules/${resource}`;
             return done(root);
         })();
 

@@ -36,8 +36,7 @@ module.exports = class {
         try {
             const {path} = this.#bee.project;
             let resolved = require.resolve(this.#resource, {paths: [path]});
-            resolved = `file://${resolved}`;
-            exports = this.#resource === 'electron' ? require(resolved) : await import(resolved);
+            exports = require(resolved);
         }
         catch (err) {
             const error = new Error(`Error importing "${this.#resource}". ${err.message}`);
