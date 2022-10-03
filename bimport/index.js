@@ -14,10 +14,5 @@ module.exports = bee => {
         return await bee.import(resource, version);
     }
 
-    async function breload(resource, version) {
-        return await bimport(resource, version);
-    }
-
     Object.defineProperty(global, 'bimport', {get: () => bimport});
-    Object.defineProperty(global, 'breload', {get: () => breload});
 }

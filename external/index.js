@@ -8,9 +8,10 @@ module.exports = class {
         // Remove the version of the package
         this.#resource = (() => {
             const split = resource.split('/');
-            const pkg = split[0].startsWith('@') ? `${split.shift()}/${split.shift()}` : split.shift();
+            const scope = split[0].startsWith('@') ? split.shift() : void 0;
+            const [name] = split.shift().split('@'); // Remove the version
             const subpath = split.join('/');
-            return pkg.split('@')[0] + (subpath ? `/${subpath}` : '');
+            return (scope ? `${scope}/${name}` : name) + (subpath ? `/${subpath}` : '');
         })();
     }
 
@@ -35,8 +36,7 @@ module.exports = class {
         try {
             const {path} = this.#bee.project;
             let resolved = require.resolve(this.#resource, {paths: [path]});
-            resolved = `file://${resolved}`;
-            exports = this.#resource === 'electron' ? require(resolved) : await import(resolved);
+            exports = require(resolved);
         }
         catch (err) {
             const error = new Error(`Error importing "${this.#resource}". ${err.message}`);
