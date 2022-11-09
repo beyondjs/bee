@@ -134,7 +134,7 @@ module.exports = class {
         const promises = [];
         dependencies.forEach(({resource, kind}) => {
             if (resource === this.#resource) return;
-            if (['bundle', 'transversal', 'external'].includes(kind)) {
+            if (['bundle', 'transversal', 'external', 'beyond.reserved'].includes(kind)) {
                 promises.push(this.#bee.import(resource));
             }
         });
