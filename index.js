@@ -86,8 +86,6 @@ module.exports = (host, {inspect}) => new class extends Map {
         resource = resource.includes('?') ? resource.slice(0, resource.indexOf('?')) : resource;
         const key = resource + qs;
 
-        console.log('henry', resource, qs, key);
-
         const bundle = (() => {
             if (this.has(key)) return this.get(key);
 
@@ -104,8 +102,10 @@ module.exports = (host, {inspect}) => new class extends Map {
             }
 
             const split = resource.split('/');
-            const pkg = split[0].startsWith('@') ? `${split.shift()}/${split.shift()}` : split.shift();
-
+            const scope = split[0].startsWith('@') ? split.shift() : void 0;
+            const [name, version] = split.shift().split('@');
+            const pkg = scope ? `${scope}/${name}` : name;
+console.log('henry', pkg, name, version, scope);
             return (pkg === project.specifier || project.libraries.includes(pkg)) ?
                 new Bundle(this, resource, version) : new External(this, resource);
         })();
