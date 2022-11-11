@@ -108,9 +108,11 @@ module.exports = (host, local) => new class extends Map {
             const scope = split[0].startsWith('@') ? split.shift() : void 0;
             const [name, version] = split.shift().split('@');
             const pkg = scope ? `${scope}/${name}` : name;
-console.log('henry', pkg, name, version, scope);
+            const subpath = split.join('/');
+            const module = subpath ? `${pkg}/${subpath}` : pkg;
+
             return (pkg === project.specifier || project.libraries.includes(pkg)) ?
-                new Bundle(this, resource, version) : new External(this, resource);
+                new Bundle(this, module, version) : new External(this, resource);
         })();
 
         this.set(key, bundle);
