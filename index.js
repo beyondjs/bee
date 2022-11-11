@@ -82,8 +82,10 @@ module.exports = (host, {inspect}) => new class extends Map {
         if (!resource) throw new Error('bimport() requires a specifier');
         if (typeof resource !== 'string') throw new Error(`bimport "${typeof resource}" specifier is invalid`);
 
-        const qs = version ? (resource.includes('?') ? '&' : '?') + `version=${version}` : '';
-        resource = resource.includes('?') ? resource.slice(0, resource.indexOf('?')) : resource;
+        const qs = (() => {
+            if (!version) return '';
+            return (resource.includes('?') ? '&' : '?') + `version=${version}`;
+        })();
         const key = resource + qs;
 
         const bundle = (() => {
