@@ -6,7 +6,7 @@ const Bridges = require('./bridges');
 /**
  * The collection of BeyondJS bundles imported by the project
  */
-module.exports = (host, local) => new class extends Map {
+module.exports = (host, {inspect}) => new class extends Map {
     #host;
     get host() {
         return this.#host;
@@ -63,10 +63,9 @@ module.exports = (host, local) => new class extends Map {
 
         // Import @beyond-js/kernel/bundle as it is required by brequire
         this.#bkb = await this.import('@beyond-js/kernel/bundle');
-
-        if (local?.hmr) {
+        if (inspect) {
             const {local} = await this.import('@beyond-js/local/main');
-            local.register(local.hmr);
+            local.register(inspect);
         }
 
         this.#resolve();
