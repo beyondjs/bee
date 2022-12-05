@@ -2,6 +2,7 @@ const Bundle = require('./bundle');
 const External = require('./external');
 const Project = require('./project');
 const Bridges = require('./bridges');
+const http = require('http');
 
 /**
  * The collection of BeyondJS bundles imported by the project
@@ -57,7 +58,18 @@ module.exports = (host, {inspect}) => new class extends Map {
         if (this.#initialised) throw new Error('Object already initialised');
         this.#initialised = true;
 
+        const check = await (() => new Promise(resolve =>
+            http.get(this.#host, r => resolve(true)).on('error', e => resolve(false))
+        ))();
+        if (!check) {
+            console.error(`Could not connect to the BeyondJS dev server: "${this.#host}".\n` +
+                `Verify that beyond is running in the project folder.`);
+            return;
+        }
+
         await this.#project.fetch();
+        if (this.#project.error) return;
+
         const {specifier, vspecifier, version} = this.#project;
         Object.defineProperty(globalThis, '__app_package', {get: () => ({specifier, vspecifier, version})});
 
@@ -111,7 +123,7 @@ module.exports = (host, {inspect}) => new class extends Map {
             const module = subpath ? `${pkg}/${subpath}` : pkg;
 
             return (pkg === project.specifier || project.libraries.includes(pkg)) ?
-                new Bundle(this, module, version) : new External(this, resource);
+                   new Bundle(this, module, version) : new External(this, resource);
         })();
 
         this.set(key, bundle);

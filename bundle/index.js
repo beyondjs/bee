@@ -1,6 +1,7 @@
 const fetch = require('node-fetch');
 const {join} = require('path');
 const Compiler = require('./compiler');
+const BeeError = require('../error');
 
 module.exports = class {
     #bee;
@@ -93,21 +94,27 @@ module.exports = class {
             (fetched = await fetch(url));
         }
         catch (err) {
-            const error = new Error(`Resource "${this.#resource}" is invalid.` +
+            const error = new BeeError(`Resource "${this.#resource}" is invalid.` +
                 `Error: "${err.message}".\n` +
                 `URL: "${url}"`);
-            this.#reject(error);
-            throw error;
+            // this.#reject(error);
+            // throw error;
+
+            this.#reject(error.message);
+            console.log(error.message);
+            return;
         }
 
         const {status, body} = fetched;
         if (status === 500) {
             const message = body.read();
-            const error = new Error(`Resource "${this.#resource}" status 500 received.\n` +
+            const error = new BeeError(`Resource "${this.#resource}" status 500 received.\n` +
                 `Error: ${message}\n` +
-                `URL: "${url}"`);
-            this.#reject(error);
-            throw error;
+                `For more information check the following link: "${url}?info"\n`);
+
+            this.#reject(error.message);
+            console.log(error.message);
+            return;
         }
 
         let is, script, errors, dependencies;
@@ -118,16 +125,19 @@ module.exports = class {
         catch (err) {
             const error = new Error(`Resource "${this.#resource}" is invalid: "${err.message}".\n` +
                 `URL: "${url}"`);
-            this.#reject(error);
-            throw error;
+
+            this.#reject(error.message);
+            console.log(error.message);
+            return;
         }
 
         if (errors?.length) {
             const error = new Error(`Errors found importing "${this.#resource}".\n` +
                 `Errors: ${JSON.stringify(errors)}.\n` +
                 `URL: "${url}"`);
-            this.#reject(error);
-            throw error;
+            this.#reject(error.message);
+            console.log(error.message);
+            return;
         }
 
         // Import the dependencies before compiling the bundle
@@ -146,8 +156,9 @@ module.exports = class {
             const error = new Error(`Error importing "${this.#resource}":\n` +
                 `Dependency error: ${err.message}.\n` +
                 `URL: "${url}"`);
-            this.#reject(error);
-            throw error;
+            this.#reject(error.message);
+            console.log(error.message);
+            return;
         }
 
         this.#is = is;
@@ -171,12 +182,12 @@ module.exports = class {
             this.#compiler.compile(script);
         }
         catch (err) {
-            console.log(err.stack);
-            const error = new Error(`Error compiling bundle "${this.#resource}".\n` +
+            const error = new BeeError(`Error compiling bundle "${this.#resource}".\n` +
                 `Error: ${err.message}.\n` +
-                `URL: "${url}"`);
-            this.#reject(error);
-            throw error;
+                `For more information check the following link: "${url}"\n`);
+            this.#reject(error.message);
+            console.log(error.message);
+            return;
         }
 
         this.#resolve(this.#compiler.exports);
