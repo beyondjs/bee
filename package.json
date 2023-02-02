@@ -1,6 +1,7 @@
 {
   "name": "@beyond-js/bee",
-  "version": "0.0.5",
+  "version": "0.0.6",
+  "description": "Improves the Node.js development experience by allowing you to interact with the BeyondJS DevServer instead of looking for packages on disk.",
   "dependencies": {
     "node-fetch": "^2.6.7"
   },
