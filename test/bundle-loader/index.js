@@ -1,4 +1,4 @@
-require('@beyond-js/bee')('http://localhost:5050', { hmr: true });
+require('@beyond-js/bee')('http://localhost:5070', { hmr: true });
 
 (async () => {
 	console.log('--> Test start...');
