@@ -97,17 +97,20 @@ module.exports = class {
 			const error = new BeeError(
 				`Resource "${this.#resource}" is invalid.` + `Error: "${err.message}".\n` + `URL: "${url}"`
 			);
-			// this.#reject(error);
-			// throw error;
-
 			this.#reject(error.message);
 			console.log(error.message);
 			return;
 		}
 
-		const { status, body } = fetched;
+		const { status } = fetched;
 		if (status === 500) {
-			const message = body.read();
+			let message;
+			try {
+				message = await fetched.text();
+			} catch {
+				message = 'Unknown error (could not parse response body)';
+			}
+
 			const error = new BeeError(
 				`Resource "${this.#resource}" status 500 received.\n` +
 					`Error: ${message}\n` +
