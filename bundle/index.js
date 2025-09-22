@@ -190,7 +190,9 @@ module.exports = class {
 					`For more information check the following link: "${url}"\n`
 			);
 			this.#reject(error.message);
-
+			console.error(error.message)
+			console.error(err)
+			
 			return;
 		}
 
