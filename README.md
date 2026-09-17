@@ -27,10 +27,10 @@ We welcome contributions to `@beyond-js/bee`. If you'd like to contribute, pleas
 
 ## License
 
-`@beyond-js/bee` is [MIT licensed](LICENSE).
+`@beyond-js/bee` is MIT licensed.
 
 ```
 # License
 
-The @beyond-js/bee package is licensed under the MIT license. Please see the LICENSE file for more information.
+The @beyond-js/bee package is licensed under the MIT license. Consult the published package for its license text.
 ```
