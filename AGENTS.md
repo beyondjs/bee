@@ -5,6 +5,7 @@ Canonical instructions for this repository and its descendants. Tool-specific fi
 Legacy HTTP compatibility runtime. Do not silently substitute the new BEE Node implementation.
 
 - Use English for first-party docs, instructions, comments, docstrings and new explanatory text. Preserve intentional locale catalogs, public names/specifiers/paths, protocol keys and functional test values unless a compatibility change is explicitly authorized. Do not rewrite vendor, generated, lockfile or third-party content for language cleanup.
+- Keep repository content portable: never write a developer's checkout, home, temporary-toolchain or agent-runtime path into documentation, instructions, code, fixtures or versioned evidence. Use repository-relative paths, documented variables or neutral placeholders.
 - Preserve current uncommitted work and repository history. Do not commit, push, reset, publish or deploy without explicit task authorization.
 - Keep public Beyond module imports distinct from internal relative source imports. Do not silently replace the configured bootstrap, runtime or framework.
 - Read the relevant maintained references before architectural changes; label source findings, runtime evidence and proposals accurately. Use targeted validation for behavior changes; documentation/comment edits do not require unrelated builds or services.
