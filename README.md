@@ -20,6 +20,10 @@ import bee from '@beyond-js/bee';
 })();
 ```
 
+## Validation
+
+[Testing](docs/testing.md) describes the two legacy manual smoke scripts in `test/`; this repository has no assertion suite.
+
 ## Contributing
 
 We welcome contributions to `@beyond-js/bee`. If you'd like to contribute, please read the
